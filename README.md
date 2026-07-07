@@ -1,7 +1,9 @@
 # 群友观测簿 (portrayal_plugin)
 
 基于 NapCat API 采集群聊消息，通过 LLM 生成用户画像，并注入 MaiSaka Planner/Replyer 作为低优先级回复参考。
-目前功能初建并不完善，理论收益有，高不高未知，也有一些BUG，顺便征求好的内容建议。
+目前功能初建并不完善，理论收益有，高不高未知，目前不是全部聊天记录，只是画像生成所需的量，只是用来生成画像采集一次，有点浪费所以用在了其他地方，所以信息并不完整。 
+
+**BUG难免**
 
 ## 功能
 
@@ -135,7 +137,11 @@ allowed_user_ids = []            # 权限白名单，空=所有人可用
 - **网络**：每次采集 ~200KB + LLM 调用
 
 ## 效果图
- 
+
+<img width="2474" height="1295" alt="image" src="https://github.com/user-attachments/assets/5e54642f-73af-42db-9e03-42b8451d0b7d" />
+
+<img width="780" height="974" alt="7fe65e02193f5b99b14bc409981251cb" src="https://github.com/user-attachments/assets/520679e3-d47a-47d9-9c1e-46dfa0db23cf" />
+
 
 
 
