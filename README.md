@@ -176,7 +176,16 @@ portrayal/
 - 群用户画像分析思路：https://github.com/Zhalslar/astrbot_plugin_portrayal
 - UI美术风格、话题分词统计思路：https://github.com/ChatLab/ChatLab
 
+## 隐私提示
+
+- 本插件通过 NapCat API 采集群聊消息，消息仅在内存中缓存 10 分钟，不持久化存储
+- 采集到的群聊内容会发送到 `deepseek_base_url` 配置的第三方 LLM API（默认为 DeepSeek 官方 API）用于生成画像
+- `deepseek_api_key` 以明文存储在 `config.toml` 中，请确保配置文件不被公开访问
+- 如需自托管 LLM，可将 `deepseek_base_url` 指向本地/私有 API 地址
+- 画像数据存储在插件本地 SQLite 数据库中，不会上传到任何第三方服务
 
 ## License
 
 GPL-3.0
+
+
