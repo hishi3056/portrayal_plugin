@@ -23,7 +23,7 @@
     "min_version": "2.0.0",
     "max_version": "2.99.99"
   },
-  "dependencies": ["jieba"],
+  "dependencies": [],
   "capabilities": [
     "send",
     "llm",
@@ -33,6 +33,7 @@
     "render",
     "api",
     "maisaka"
+    "database"
   ],
   "i18n": {
     "default_locale": "zh-CN",
