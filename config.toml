@@ -1,0 +1,89 @@
+[plugin]
+config_version = "1.0.0"
+enabled = true
+
+[portrayal]
+# ─── 消息采集 ───
+# 消息采集时间范围（小时），默认7天
+scan_hours = 168
+
+# 目标用户发言采集上限
+message_limit = 100
+
+# 目标用户最低文本发言条数，低于此值拒绝生成画像
+min_target_messages = 3
+
+# 每次 NapCat API 调用拉取条数
+per_query_count = 200
+
+# 最大 API 调用轮数（10轮=最多2000条全群消息）
+max_rounds = 10
+
+# 消息缓存 TTL（分钟）
+cache_ttl_minutes = 10
+
+# ─── LLM 配置 ───
+# 供应商: deepseek（直调 Deepseek API）| maibot（使用 MaiBot 内置模型路由）
+provider = "deepseek"
+
+# Deepseek API 密钥
+deepseek_api_key = ""
+
+# Deepseek API 地址（默认官方 API）
+deepseek_base_url = "https://api.deepseek.com/v1"
+
+# Deepseek 模型名
+deepseek_model = "deepseek-chat"
+
+# LLM 温度
+temperature = 0.7
+
+# LLM 调用失败重试次数
+llm_retry_times = 1
+
+# ─── 画像生成 ───
+# 聊天记录截断字符数
+chat_log_max_chars = 8000
+
+# 画像刷新提醒天数
+refresh_remind_days = 14
+
+# 画像 TTL 天数（0=永不过期）
+profile_ttl_days = 0
+
+# 是否通过 Hook 注入画像到 Replyer（需 MaiSaka 补丁或 MaiBot 1.0.6+）
+# 关闭后不影响画像采集、WebUI 等其他功能
+# 原版 Planner 注入由 MaiBot 全局配置控制，与本开关无关
+enable_injection = true
+
+# 是否通过 Hook 注入画像到 Planner，替换原版 A_memorix 画像（需 MaiBot 1.0.6+）
+# 默认关闭；开启后建议在 MaiBot WebUI 配置→记忆→聊天中使用记忆→自动注入人物画像 中关闭
+enable_planner_injection = false
+
+# 跨群画像聚合：当当前群无画像时，自动合并该用户在其他群的画像
+enable_cross_group_merge = true
+
+# ─── 权限 ───
+# 命令前缀（修改此值可自定义触发前缀，如 / 、. 等）
+command_prefix = "+"
+
+# 是否渲染图片展示版
+enable_image_output = true
+
+# 保护名单（不允许被分析的用户 QQ 号）
+protected_user_ids = []
+
+# 触发权限白名单（空=所有人可用）
+allowed_user_ids = []
+
+# ─── 未来功能 ───
+# WebUI 端口（v0.4.0 启用）
+webui_port = 8089
+
+# WebUI 监听地址，默认仅本机（127.0.0.1）。
+# 如需局域网其他设备访问，改为 "0.0.0.0"，并务必设置 webui_token。
+webui_host = "127.0.0.1"
+
+# WebUI 访问 token，空 = 无认证（仅本机访问时可接受）。
+# 绑定 0.0.0.0 时强烈建议设置，访问需带 ?token=xxx 或 Authorization: Bearer xxx。
+webui_token = ""
