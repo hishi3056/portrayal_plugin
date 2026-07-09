@@ -25,15 +25,19 @@
   },
   "dependencies": [],
   "capabilities": [
-    "send",
-    "llm",
-    "message",
-    "person",
-    "chat",
-    "render",
-    "api",
-    "maisaka",
-    "database"
+    "send.text",
+    "send.image",
+    "send.hybrid",
+    "llm.generate",
+    "message.get_recent",
+    "message.get_by_id",
+    "person.get_id",
+    "person.get_value",
+    "person.get_id_by_name",
+    "chat.get_group_streams",
+    "render.html2png",
+    "api.call",
+    "database.get"
   ],
   "i18n": {
     "default_locale": "zh-CN",
