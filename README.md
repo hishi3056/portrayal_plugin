@@ -44,7 +44,19 @@
 
 1. 将 `portrayal/` 目录复制到 MaiBot 的 `plugins/` 文件夹
 2. 编辑 `config.toml` 填写 LLM API Key
-3. 重启 MaiBot
+3. 安装 jieba（推荐但不强制）：
+   ```bash
+   # 在 MaiBot 的 Python 虚拟环境中安装
+   # 一键包用户（替换 <实例ID> 为你的实际路径）：
+   C:\Users\<你的用户名>\AppData\Roaming\MaiBotOneKeyDesktop\<实例ID>\modules\MaiBot\.venv\Scripts\pip install jieba
+   
+   # 源码部署用户：
+   cd /path/to/MaiBot
+   .venv\Scripts\pip install jieba   # Windows
+   # .venv/bin/pip install jieba      # Linux/Mac
+   ```
+   不安装 jieba 也能使用插件，词云分词会回退到正则匹配，精度略低。
+4. 重启 MaiBot
 
 ## 配置
 
