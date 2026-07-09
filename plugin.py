@@ -420,10 +420,12 @@ class PortrayalPlugin(MaiBotPlugin):
         try:
             messages = kwargs.get("messages", [])
             if not isinstance(messages, list) or not messages:
+                self.ctx.logger.debug("Planner Hook: messages 为空,跳过")
                 return {"action": "continue"}
 
             session_id = str(kwargs.get("session_id", "") or "")
             if not session_id:
+                self.ctx.logger.debug("Planner Hook: session_id 为空,跳过")
                 return {"action": "continue"}
 
             # 从 session 最近消息获取发送者
@@ -495,19 +497,24 @@ class PortrayalPlugin(MaiBotPlugin):
             return {"action": "continue"}
 
     async def _get_latest_sender_user_id(self, session_id: str) -> str:
-        """从 session 最近消息获取最新发送者 user_id（非 bot）。"""
+        """从 session 最近消息获取最新发送者 user_id。
+
+        get_recent 返回时间正序（旧->新），取最后一条非空 user_id。
+        正常对话流中最后一条是用户消息（用户发消息触发 Planner），
+        bot 回复在用户消息之前，无需额外过滤。
+        """
         try:
-            result = await self.ctx.message.get_recent(chat_id=session_id, limit=5)
+            result = await self.ctx.message.get_recent(chat_id=session_id, limit=10)
             if isinstance(result, dict):
                 msgs = result.get("messages", [])
             elif isinstance(result, list):
                 msgs = result
             else:
                 return ""
+            latest_uid = ""
             for msg in msgs:
                 if not isinstance(msg, dict):
                     continue
-                # 消息结构: msg["message_info"]["user_info"]["user_id"]
                 msg_info = msg.get("message_info") or {}
                 if not isinstance(msg_info, dict):
                     continue
@@ -515,10 +522,10 @@ class PortrayalPlugin(MaiBotPlugin):
                 if isinstance(user_info, dict):
                     uid = str(user_info.get("user_id", "") or "").strip()
                     if uid:
-                        return uid
-            return ""
+                        latest_uid = uid
+            return latest_uid
         except Exception as exc:
-            self.ctx.logger.debug("获取最近发送者失败: %s", exc)
+            self.ctx.logger.warning("获取最近发送者失败: %s", exc)
             return ""
 
     # ─── 用户消息统计(零 token)──────────────────────────────────
