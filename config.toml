@@ -54,14 +54,14 @@ profile_ttl_days = 0
 # 是否通过 Hook 注入画像到 Replyer（需 MaiSaka 补丁或 MaiBot 1.0.6+）
 # 关闭后不影响画像采集、WebUI 等其他功能
 # 原版 Planner 注入由 MaiBot 全局配置控制，与本开关无关
-enable_injection = true
+enable_injection = false
 
 # 是否通过 Hook 注入画像到 Planner，替换原版 A_memorix 画像（需 MaiBot 1.0.6+）
 # 默认关闭；开启后建议在 MaiBot WebUI 配置→记忆→聊天中使用记忆→自动注入人物画像 中关闭
 enable_planner_injection = false
 
 # 跨群画像聚合：当当前群无画像时，自动合并该用户在其他群的画像
-enable_cross_group_merge = true
+enable_cross_group_merge = false
 
 # ─── 权限 ───
 # 命令前缀（修改此值可自定义触发前缀，如 / 、. 等）
