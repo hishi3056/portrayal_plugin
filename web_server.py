@@ -760,6 +760,11 @@ class PortrayalWebServer:
                                     cfg_dict[attr] = val
                             except Exception:
                                 pass
+            # 脱敏：API Key / Token 不返回明文
+            _sensitive_keys = {'deepseek_api_key', 'webui_token'}
+            for sk in _sensitive_keys:
+                if sk in cfg_dict and cfg_dict[sk]:
+                    cfg_dict[sk] = '***'
             return self._ok({
                 "db_path": str(self._db.db_path),
                 "prompts_dir": str(self._prompts_dir),
@@ -778,33 +783,49 @@ class PortrayalWebServer:
             if not hasattr(self._plugin.config, 'portrayal'):
                 return self._err("配置对象不可用", 500)
             cfg = self._plugin.config.portrayal
+            # 白名单：只允许修改这些配置项
+            _allowed_keys = {
+                'scan_hours', 'message_limit', 'min_target_messages',
+                'per_query_count', 'max_rounds', 'cache_ttl_minutes',
+                'provider', 'deepseek_api_key', 'deepseek_base_url',
+                'deepseek_model', 'temperature', 'chat_log_max_chars',
+                'profile_ttl_days', 'refresh_remind_days',
+                'enable_injection', 'enable_planner_injection',
+                'enable_cross_group_merge', 'enable_image_output',
+                'webui_port', 'webui_host', 'webui_token',
+                'command_prefix', 'protected_user_ids',
+                'allowed_user_ids', 'llm_retry_times',
+            }
             updated = []
             for key, val in data.items():
-                if hasattr(cfg, key):
-                    old_val = getattr(cfg, key)
-                    # 类型转换
-                    if isinstance(old_val, bool):
-                        val = str(val).lower() in ('true', '1', 'yes')
-                    elif isinstance(old_val, int):
-                        val = int(val)
-                    elif isinstance(old_val, float):
-                        val = float(val)
-                    elif isinstance(old_val, list):
-                        if isinstance(val, str):
-                            val = [v.strip() for v in val.split(',') if v.strip()]
-                    setattr(cfg, key, val)
-                    updated.append(key)
+                if key not in _allowed_keys:
+                    continue
+                if not hasattr(cfg, key):
+                    continue
+                old_val = getattr(cfg, key)
+                # 类型转换
+                if isinstance(old_val, bool):
+                    val = str(val).lower() in ('true', '1', 'yes')
+                elif isinstance(old_val, int):
+                    val = int(val)
+                elif isinstance(old_val, float):
+                    val = float(val)
+                elif isinstance(old_val, list):
+                    if isinstance(val, str):
+                        val = [v.strip() for v in val.split(',') if v.strip()]
+                setattr(cfg, key, val)
+                updated.append(key)
             # 持久化到 config.toml
             try:
-                import tomli_w
+                import tomlkit
                 from pathlib import Path
                 config_path = Path(self._plugin.ctx.paths.plugin_dir) / "portrayal" / "config.toml"
                 config_data = {"plugin": {"config_version": "1.0.0", "enabled": True}, "portrayal": {}}
                 for attr in dir(cfg):
                     if not attr.startswith('_') and not callable(getattr(cfg, attr)):
                         config_data["portrayal"][attr] = getattr(cfg, attr)
-                with open(config_path, 'wb') as f:
-                    tomli_w.dump(config_data, f)
+                with open(config_path, 'w', encoding='utf-8') as f:
+                    tomlkit.dump(config_data, f)
             except Exception:
                 pass  # 持久化失败不影响运行时
             self._logger.info("配置已更新: %s", ', '.join(updated))
