@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "id": "maibot.portrayal_plugin",
+  "id": "rc.portrayal_plugin",
   "version": "1.0.0",
   "name": "群友观测簿",
   "description": "基于 NapCat API 采集群聊消息，生成用户画像并注入 MaiSaka Planner/Replyer 作为低优先级回复参考。支持常规/阴阳画像、版本历史、六维雷达图、关系图谱、词云、WebUI 管理。",
